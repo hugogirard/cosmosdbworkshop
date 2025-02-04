@@ -39,16 +39,15 @@ Prior to starting these labs, you must have the following operating system and s
 
 ##### Operating System
 
-- 64-bit Windows 10 Operating System
-  - [download](https://www.microsoft.com/windows/get-windows-10)
+- 64-bit Windows 11 Operating System
 
 ##### Software
 
 | Software                                    | Download Link                                                |
 | ------------------------------------------- | ------------------------------------------------------------ |
 | Git                                         | [/git-scm.com/downloads](https://git-scm.com/downloads)      |
-| .NET Core 3.1 (or greater) SDK <sup>1</sup> | [/download.microsoft.com/dotnet-sdk-3.1](https://dotnet.microsoft.com/download/dotnet-core/thank-you/sdk-3.1.401-windows-x64-installer) |
-| Visual Studio Code                          | [/code.visualstudio.com/download](https://go.microsoft.com/fwlink/?Linkid=852157) |
+| .NET Core 8.0 (or greater) SDK <sup>1</sup> | [dotnet 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) |
+| Visual Studio Code                          | [/code.visualstudio.com/download](https://code.visualstudio.com/download) |
 
 #### .NET Lab Guides
 

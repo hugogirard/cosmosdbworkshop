@@ -6,6 +6,7 @@ In this lab, you will setup your Azure subscription with the required resources 
 
 - Azure Paid Subscription
 - [Azure PowerShell Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?pivots=winget)
 
 ## Lab Content Setup
 
@@ -23,7 +24,6 @@ In this lab, you will setup your Azure subscription with the required resources 
 
    ```powershell
    Set-ExecutionPolicy Unrestricted -Scope Process
-   ```
 
    > This setting will only apply within your current Powershell window.
 
@@ -35,63 +35,37 @@ In this lab, you will setup your Azure subscription with the required resources 
 
    > The starter code for each lab is located inside the **templates** folder. To use a folder other that **Documents\CosmosLabs** for your lab code, the files can be copied manually instead.
 
-7. To begin Azure resource setup, first connect to your Azure account:
+7. Now using Azure CLI in the Azure Portal Shell do those commands:
 
-   ```powershell
-   Connect-AzAccount
-   ```
+If you don't have already a CosmosDB account and a resource group run those following commands:
 
-   or
+```bash
+RESOURCE_GROUP=rg-demo-cosmosdb-workshop
+LOCATION=canadacentral
+COSMOS_DB_NAME=cosmos-$(uuidgen | tr -d '-')
 
-   ```powershell
-   Connect-AzAccount -subscription <subscription id>
-   ```
+az group create -n $RESOURCE_GROUP -l $LOCATION
+az cosmosdb create -n $COSMOS_DB_NAME -g $RESOURCE_GROUP --locations regionName=$LOCATION failoverPriority=0 
+```
 
-8. To create the Azure resources for the labs run the labSetup.ps1 script:
+```bash
+az cosmosdb sql database create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -n 'NutritionDatabase' --throughput 1000
+az cosmosdb sql database create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -n 'StoreDatabase' --throughput 1000
+az cosmosdb sql database create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -n 'FinancialDatabase' --throughput 1000
+```
 
-   ```powershell
-   .\labSetup.ps1 -resourceGroupName 'name'
-   ```
+```bash
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'StoreDatabase' -n 'CartContainer' --partition-key-path '/Item'
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'StoreDatabase' -n 'CartContainerByState' --partition-key-path '/BuyerState'
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'StoreDatabase' -n 'StateSales' --partition-key-path '/State' 
+```
 
-   and please choose a `name` which is likely to be unique i.e. `cosmoslabsXXXXX` where `XXXXX` are some random digits.
+```bash
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'NutritionDatabase' -n 'FoodCollection' --partition-key-path '/foodGroup'
+```
 
-   - This script creates resources in the _West US_ region by default. To use another region add **-location 'region name'** to the above command.
+```bash
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'FinancialDatabase' -n 'PeopleCollection' --partition-key-path '/accountHolder.LastName'
 
-   - This script will fail if the specified resource group already exists, you may want to choose another `name` value. Alternatively to bypass this failure and create the resources anyway, add **-overwriteGroup** to the above command.
-
-9. Some Azure resources can take 10 minutes or more to complete setup so expect the script to run for a while before completing. After the script completes, your account should contain a **cosmoslabs** resource group with several pre-configured resources:
-
-   - Azure CosmosDB Account
-   - Stream Analytics Job
-   - Azure Data Factory
-   - Event Hubs Namespace
-
-## Log-in to the Azure Portal
-
-1. In a new window, sign in to the **Azure Portal** (<https://portal.azure.com>).
-
-1. Once you have logged in, you may be prompted to start a tour of the Azure portal. You can safely skip this step.
-
-### Retrieve Account Credentials
-
-The .NET SDK requires credentials to connect to your Azure Cosmos DB account. You will collect and store these credentials for use throughout the lab.
-
-1. On the left side of the portal, select the **Resource groups** link.
-
-   ![Resource groups is highlighted](../media/02-resource_groups.jpg "Select resource groups")
-
-1. In the **Resource groups** blade, locate and select the **cosmoslabs** _Resource Group_.
-
-   ![The recently cosmosdb resource group is highlighted](../media/02-lab_resource_group.jpg "Select the CosmosDB resource group")
-
-1. In the **cosmoslabs** blade, select the **Azure Cosmos DB** account you recently created.
-
-   ![The Cosmos DB resource is highlighted](../media/02-cosmos_resource.jpg "Select the Cosmos DB resource")
-
-1. In the **Azure Cosmos DB** blade, locate the **Settings** section and select the **Keys** link.
-
-   ![The Keys pane is highlighted](../media/02-keys_pane.jpg "Select the Keys Pane")
-
-1. In the **Keys** pane, record the values in the **CONNECTION STRING**, **URI** and **PRIMARY KEY** fields. You will use these values later in this lab.
-
-   ![The URI, Primary Key and Connection string credentials are highlighted](../media/02-keys.jpg "Copy the URI, primary key and the connection string")
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'FinancialDatabase' -n 'TransactionCollection' --partition-key-path '/costCenter'
+```
