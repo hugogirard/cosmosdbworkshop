@@ -30,7 +30,7 @@ You will start by using the .NET SDK to create containers to use in this and fol
 1. In the open terminal pane, enter and execute the following command:
 
     ```sh
-    dotnet new console --output .
+    dotnet new console --use-program-main --output .
     ```
 
     > This command will create a new .NET Core project. The project will be a **console** project and the project will be created in the current directly since you used the `--output .` option.
@@ -40,18 +40,19 @@ You will start by using the .NET SDK to create containers to use in this and fol
 1. In the terminal pane, enter and execute the following command:
 
     ```sh
-    dotnet add package Microsoft.Azure.Cosmos --version 3.12.0
+    dotnet add package Newtonsoft.Json --version 13.0.3
+    dotnet add package Microsoft.Azure.Cosmos --version 3.46.1
     ```
 
-    > This command will add the [Microsoft.Azure.Cosmos](https://www.nuget.org/packages/Microsoft.Azure.Cosmos/) NuGet package as a project dependency. The lab instructions have been tested using the `3.12.0` version of this NuGet package.
+    > This command will add the [Microsoft.Azure.Cosmos](https://www.nuget.org/packages/Microsoft.Azure.Cosmos/) NuGet package as a project dependency. The lab instructions have been tested using the `3.46.1` version of this NuGet package.
 
 1. In the terminal pane, enter and execute the following command:
 
     ```sh
-    dotnet add package Bogus --version 30.0.2
+    dotnet add package Bogus --version 35.6.1
     ```
 
-    > This command will add the [Bogus](../media/https://www.nuget.org/packages/Bogus/) NuGet package as a project dependency. This library will allow us to quickly generate test data using a fluent syntax and minimal code. We will use this library to generate test documents to upload to our Azure Cosmos DB instance. The lab instructions have been tested using the `30.0.2` version of this NuGet package.
+    > This command will add the [Bogus](../media/https://www.nuget.org/packages/Bogus/) NuGet package as a project dependency. This library will allow us to quickly generate test data using a fluent syntax and minimal code. We will use this library to generate test documents to upload to our Azure Cosmos DB instance. The lab instructions have been tested using the `35.6.1` version of this NuGet package.
 
 1. In the terminal pane, enter and execute the following command:
 
@@ -369,7 +370,7 @@ To create a container, you must specify a name and a partition key path. A parti
 1. Locate the `InitalizeContainer()` method within the `Main` method and add the following code to the method to call the `LoadFoodAndBeverage()` method:
 
     ```csharp
-    await LoadFoodAndBeverageAsync(container);
+    await LoadFoodAndBeverage(container);
     ```
 
 1. Your `Main()` method should now look like this :
@@ -491,5 +492,3 @@ To create a container, you must specify a name and a partition key path. A parti
 1. Observe the output of the console application. You should see a list of item ids associated with new items that are being created. You have now placed three different types of documents (PurchaseFoodOrBeverage, WatchLiveTelevisionChannel, ViewMap) into the `EntertainmentContainer` showing how Cosmos DB is schema-less.
 
 1. Close the folder in Visual Studio Code
-
-> If this is your final lab, follow the steps in [Removing Lab Assets](11-cleaning_up.md) to remove all lab resources.

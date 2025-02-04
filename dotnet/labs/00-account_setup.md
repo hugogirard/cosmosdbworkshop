@@ -6,7 +6,6 @@ In this lab, you will setup your Azure subscription with the required resources 
 
 - Azure Paid Subscription
 - [Azure PowerShell Module](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps)
-- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?pivots=winget)
 
 ## Lab Content Setup
 
@@ -40,7 +39,7 @@ In this lab, you will setup your Azure subscription with the required resources 
 If you don't have already a CosmosDB account and a resource group run those following commands:
 
 ```bash
-RESOURCE_GROUP=rg-demo-cosmosdb-workshop
+RESOURCE_GROUP=cosmoslabs
 LOCATION=canadacentral
 COSMOS_DB_NAME=cosmos-$(uuidgen | tr -d '-')
 
@@ -65,7 +64,8 @@ az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'Nutri
 ```
 
 ```bash
-az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'FinancialDatabase' -n 'PeopleCollection' --partition-key-path '/accountHolder.LastName'
+
+az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'FinancialDatabase' -n 'PeopleCollection' --partition-key-path '/accountHolder/LastName'
 
 az cosmosdb sql container create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -d 'FinancialDatabase' -n 'TransactionCollection' --partition-key-path '/costCenter'
 ```
