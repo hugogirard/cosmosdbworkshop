@@ -55,7 +55,7 @@ Prior to starting these labs, you must have the following operating system and s
 
 - [Pre-lab: Creating an Azure Cosmos DB account](dotnet/labs/00-account_setup.md)
 - [Lab 1: Creating a container in Azure Cosmos DB](dotnet/labs/01-creating_partitioned_collection.md)
-- [Lab 2: Importing Data into Azure Cosmos DB with Azure Data Factory](dotnet/labs/02-load_data_with_adf.md)
+- [Lab 2: Importing Data into Azure Cosmos DB](dotnet/labs/02-load_data.md)
 - [Lab 3: Querying in Azure Cosmos DB](dotnet/labs/03-querying_in_azure_cosmosdb.md)
 - [Lab 4: Indexing in Azure Cosmos DB](dotnet/labs/04-indexing_in_cosmosdb.md)
 - [Lab 5: Building a .NET Console App on Azure Cosmos DB](dotnet/labs/05-build_net_app.md)
