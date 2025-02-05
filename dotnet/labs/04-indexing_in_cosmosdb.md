@@ -279,14 +279,7 @@ For ORDER BY queries that order by multiple properties, a composite index is req
     ```sql
     SELECT * FROM c ORDER BY c.foodGroup ASC, c.manufacturerName ASC
     ```
-
-    > This query will fail with the following error:
-
-    ```sql
-    "The order by query does not have a corresponding composite index that it can be served from."
-    ```
-
-    > In order to run a query that has an ORDER BY clause with one property, the default index is sufficient. Queries with multiple properties in the ORDER BY clause require a composite index.
+    Observe that this query has a very high RU charge. **Composite indexes** increase the efficiency when you're performing operations on multiple fields.  
 
 5. Still within the **FoodCollection** node, select the **Scale & Settings** link. In the **Indexing Policy** section, you will add a composite index.
 
@@ -336,63 +329,7 @@ For ORDER BY queries that order by multiple properties, a composite index is req
     ```sql
     SELECT * FROM c ORDER BY c.foodGroup ASC, c.manufacturerName ASC
     ```
-
-9. Run the following query, which the current composite index does not support.
-
-    ```sql
-    SELECT * FROM c ORDER BY c.foodGroup DESC, c.manufacturerName ASC
-    ```
-
-10. This query will not run without an additional composite index. Modify the indexing policy to include an additional composite index.
-
-    ```json
-    {
-        "indexingMode": "consistent",
-        "automatic": true,
-        "includedPaths": [
-            {
-                "path": "/manufacturerName/*"
-            },
-            {
-                "path": "/foodGroup/*"
-            }
-        ],
-        "excludedPaths": [
-            {
-                "path": "/*"
-            },
-            {
-                "path": "/\"_etag\"/?"
-            }
-        ],
-        "compositeIndexes": [
-            [
-                {
-                    "path": "/foodGroup",
-                    "order": "ascending"
-                },
-                {
-                    "path": "/manufacturerName",
-                    "order": "ascending"
-                }
-            ],
-            [
-                {
-                    "path": "/foodGroup",
-                    "order": "descending"
-                },
-                {
-                    "path": "/manufacturerName",
-                    "order": "ascending"
-                }
-            ]
-        ]
-    }
-    ```
-
-11. Re-run the query, it should succeed.
-
-> [Learn more about defining composite indexes](https://docs.microsoft.com/en-us/azure/cosmos-db/how-to-manage-indexing-policy#composite-indexing-policy-examples).
+    Check again the RU
 
 ## Adding a spatial index
 
