@@ -60,10 +60,8 @@ Prior to starting these labs, you must have the following operating system and s
 - [Lab 4: Indexing in Azure Cosmos DB](dotnet/labs/04-indexing_in_cosmosdb.md)
 - [Lab 5: Building a .NET Console App on Azure Cosmos DB](dotnet/labs/05-build_net_app.md)
 - [Lab 6: Multi-Document Transactions in Azure Cosmos DB](dotnet/labs/06-multi-document-transactions.md)
-- [Lab 7: Transactional Continuation in Azure Cosmos DB](dotnet/labs/07-transactions-with-continuation.md)
-- [Lab 8: Intro to Azure Cosmos DB Change Feed](dotnet/labs/08-change_feed_with_azure_functions.md)
-- [Lab 9: Troubleshooting Performance in Azure Cosmos DB](dotnet/labs/09-troubleshooting-performance.md)
-- [Lab 10: Optimistic Concurrency Control in Azure Cosmos DB](dotnet/labs/10-concurrency-control.md)
+- [Lab 7: Intro to Azure Cosmos DB Change Feed](dotnet/labs/08-change_feed_with_azure_functions.md)
+- [Lab 8: Optimistic Concurrency Control in Azure Cosmos DB](dotnet/labs/10-concurrency-control.md)
 - [Post-lab: Cleaning Up](dotnet/labs/11-cleaning_up.md)
 
 #### Notes

@@ -370,11 +370,11 @@ First, you will use the .NET SDK to issue request beyond the assigned capacity f
 
 ### Reducing R/U Throughput for a Container
 
-1. In the **Data Explorer** section, expand the **FinancialDatabase** database node, expand the **TransactionCollection** node, and then select the **Scale & Settings** option.
+1. In the **Data Explorer** section, expand the **FinancialDatabase** database node, and then select the **Scale** option.
 
 1. In the **Settings** section, locate the **Throughput** field and update it's value to **400**.
 
-    > This is the minimum throughput that you can allocate to a container.
+    > This is the minimum throughput that you can allocate to a database.
 
 1. Select the **Save** button at the top of the section to persist your new throughput allocation.
 
@@ -1176,8 +1176,8 @@ Using appropriate RU/s settings for container or database throughput can allow y
 
 ### Estimating Throughput Needs
 
-1. In the **Azure Cosmos DB** blade, locate and select the **Metrics** link on the left side of the blade under the **Monitoring** section.
-1. Observe the values in the **Number of requests** graph to see the volume of requests your lab work has been making to your Cosmos containers.
+1. In the **Azure Cosmos DB** blade, locate and select the **Insights** link on the left side of the blade under the **Monitoring** section.
+1. Observe the values in the **Total Requests** graph to see the volume of requests your lab work has been making to your Cosmos containers.
 
     ![The Metrics dashboard is displayed](../media/09-metrics.jpg "Review your Cosmos DB metrics dashboard")
 
@@ -1261,103 +1261,3 @@ Using appropriate RU/s settings for container or database throughput can allow y
 1. Observe the output of the console application.
 
     > You should see the total throughput needed for our application based on our estimates. This can then be used to guide how much throughput to provision for the application. To get the most accurate estimate for RU/s needs for your applications, you can follow the same pattern to estimate RU/s needs for every operation in your application multiplied by the number of those operations you expect per second. Alternatively you can use the Metrics tab in the portal to measure average throughput.
-
-### Adjusting for Usage Patterns
-
-Many applications have workloads that vary over time in a predictable way. For example, business applications that have a heavy workload during a 9-5 business day but minimal usage outside of those hours. Cosmos throughput settings can also be varied to match this type of usage pattern.
-
-1. Locate the `Main` method and comment out the last line and add a new line `await UpdateThroughput(peopleContainer);` so it looks like this:
-
-    ```csharp
-    public static async Task Main(string[] args)
-    {
-
-        Database database = _client.GetDatabase(_databaseId);
-        Container peopleContainer = database.GetContainer(_peopleContainerId);
-        Container transactionContainer = database.GetContainer(_transactionContainerId);
-
-        //await CreateMember(peopleContainer);
-        //await CreateTransactions(transactionContainer);
-        //await QueryTransactions(transactionContainer);
-        //await QueryMember(peopleContainer);
-        //await ReadMember(peopleContainer);
-        //await EstimateThroughput(peopleContainer);
-        await UpdateThroughput(peopleContainer);
-    }
-    ```
-
-1. At the bottom of the class create a new method `UpdateThroughput`:
-
-    ```csharp
-    private static async Task UpdateThroughput(Container peopleContainer)
-    {
-
-    }
-    ```
-
-1. Add the following code to retrieve the current RU/sec setting for the container:
-
-    ```csharp
-    int? throughput = await peopleContainer.ReadThroughputAsync();
-    await Console.Out.WriteLineAsync($"{throughput} RU/s");
-    ```
-
-    > Note that the type of the **Throughput** property is a nullable value. Provisioned throughput can be set either at the container or database level. If set at the database level, this property read from the **Container** will return null. When set at the container level, the same method on **Database** will return null.
-
-1. Add the following line of code to print out the minimum throughput value for the container:
-
-    ```csharp
-    ThroughputResponse throughputResponse = await container.ReadThroughputAsync(new RequestOptions());
-    int? minThroughput = throughputResponse.MinThroughput;
-    await Console.Out.WriteLineAsync($"Minimum Throughput {minThroughput} RU/s");
-    ```
-
-    > Although the overall minimum throughput that can be set is 400 RU/s, specific containers or databases may have higher limits depending on size of stored data, previous maximum throughput settings, or number of containers in a database. Trying to set a value below the available minimum will cause an exception here. The current allowed minimum value can be found on the **ThroughputResponse.MinThroughput** property.
-
-1. Add the following code to update the RU/s setting for the container then print out the updated RU/s for the container:
-
-    ```csharp
-    await peopleContainer.ReplaceThroughputAsync(1000);
-    throughput = await peopleContainer.ReadThroughputAsync();
-    await Console.Out.WriteLineAsync($"New Throughput {throughput} RU/s");
-    ```
-
-1. The finished method should look like this:
-
-    ```csharp
-    private static async Task UpdateThroughput(Container peopleContainer)
-    {
-        int? throughput = await peopleContainer.ReadThroughputAsync();
-        await Console.Out.WriteLineAsync($"Current Throughput {throughput} RU/s");
-
-        ThroughputResponse throughputResponse = await container.ReadThroughputAsync(new RequestOptions());
-        int? minThroughput = throughputResponse.MinThroughput;
-        await Console.Out.WriteLineAsync($"Minimum Throughput {minThroughput} RU/s");
-
-        await peopleContainer.ReplaceThroughputAsync(1000);
-        throughput = await peopleContainer.ReadThroughputAsync();
-        await Console.Out.WriteLineAsync($"New Throughput {throughput} RU/s");
-    }
-    ```
-
-1. Save all of your open editor tabs.
-
-1. In the terminal pane, enter and execute the following command:
-
-    ```sh
-    dotnet run
-    ```
-
-1. Observe the output of the console application.
-
-    > You should see the initial provisioned value before changing to **1000**.
-
-1. In the **Azure Cosmos DB** blade, locate and select the **Data Explorer** link on the left side of the blade.
-
-1. In the **Data Explorer** section, expand the **FinancialDatabase** database node, expand the **PeopleCollection** node, and then select the **Scale & Settings** option.
-
-1. In the **Settings** section, locate the **Throughput** field and note that is is now set to **1000**.
-
-> Note that you may need to refresh the Data Explorer to see the new value.
-
-> If this is your final lab, follow the steps in [Removing Lab Assets](11-cleaning_up.md) to remove all lab resources.
