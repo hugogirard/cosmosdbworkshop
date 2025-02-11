@@ -36,7 +36,7 @@ In this lab, you will setup your Azure subscription with the required resources 
 
 7. Now using Azure CLI in the Azure Portal Shell do those commands:
 
-If you don't have already a CosmosDB account and a resource group run those following commands:
+If you don't have already a CosmosDB resource and a resource group run those following commands:
 
 ```bash
 RESOURCE_GROUP=cosmoslabs
@@ -46,6 +46,8 @@ COSMOS_DB_NAME=cosmos-$(uuidgen | tr -d '-')
 az group create -n $RESOURCE_GROUP -l $LOCATION
 az cosmosdb create -n $COSMOS_DB_NAME -g $RESOURCE_GROUP --locations regionName=$LOCATION failoverPriority=0 
 ```
+
+Once the CosmosDB is created run the following commands
 
 ```bash
 az cosmosdb sql database create -a $COSMOS_DB_NAME -g $RESOURCE_GROUP -n 'NutritionDatabase' --throughput 1000
